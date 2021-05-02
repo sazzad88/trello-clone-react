@@ -1,38 +1,75 @@
-.App {
-  text-align: center;
+* {
+  font-family: "Nunito Sans", sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.fa,
+.far,
+.fas {
+  font-family: "Font Awesome 5 Free";
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.hero-body {
+  background: #2955a0;
+  white-space: nowrap;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.trello-column {
+  width: 300px;
+  margin: 0 4px;
+  height: 100%;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  background: lightblue;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.task {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-wrap: wrap;
+  background: #ffffff;
+  color: grey;
 }
 
-.App-link {
-  color: #61dafb;
+.board-title {
+  padding: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.task-container {
+  margin: 5px;
+}
+
+.row-item {
+  margin: 5px 0px;
+  cursor: pointer;
+}
+
+.small-text {
+  font-size: 14px;
+}
+
+.bin {
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 5px;
+}
+
+.fa-trash-alt {
+  color: red;
+}
+
+.box {
+  background: #f8f5f5;
 }
