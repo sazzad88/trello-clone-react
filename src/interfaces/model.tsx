@@ -12,4 +12,5 @@ export interface BaseColumn {
 export interface Column {
   column: BaseColumn;
   colIndex: Number;
+  move_column: (fromColumnIndex: number, toColumnIndex: number) => void;
 }

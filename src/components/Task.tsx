@@ -1,4 +1,4 @@
-import React, { DragEventHandler } from "react";
+import React from "react";
 
 import { taskModel, BaseColumn } from "../interfaces/model";
 

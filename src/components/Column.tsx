@@ -13,6 +13,8 @@ const MainColumn: React.FC<Column> = (props) => {
       if (EventTarget.classList.contains("trello-column")) {
         //console.log("drag start column");
 
+        console.log("pick column from :", colIndex);
+
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.dropEffect = "move";
         e.dataTransfer.setData("column-index", String(colIndex));
@@ -26,10 +28,11 @@ const MainColumn: React.FC<Column> = (props) => {
     toTasks: taskModel[],
     toTaskIndex: Number
   ) => {
-    console.log("move task : ", e);
+    //console.log("move task : ", e);
     e.stopPropagation();
 
     const fromColumnIndex = e.dataTransfer.getData("from-column-index");
+    console.log(fromColumnIndex);
     //const fromTasks = this.board.columns[fromColumnIndex].tasks;
     const taskIndex = e.dataTransfer.getData("from-task-index");
 
@@ -41,33 +44,15 @@ const MainColumn: React.FC<Column> = (props) => {
     // });
   };
 
-  let moveColumn = (e: React.DragEvent, toColumnIndex: Number) => {
-    console.log("move column : ", e);
+  let moveColumn = (e: React.DragEvent, toColumnIndex: number) => {
+    console.log("drop column to : ", toColumnIndex);
     const fromColumnIndex = e.dataTransfer.getData("from-column-index");
 
-    // this.$store.commit("MOVE_COLUMN", {
-    //   fromColumnIndex,
-    //   toColumnIndex,
-    // });
+    props.move_column(Number(fromColumnIndex), toColumnIndex);
   };
 
   let preventThisEvent = (e: React.DragEvent) => {
     e.preventDefault();
-  };
-
-  let moveTaskOrColumn = (
-    e: React.DragEvent,
-    toTasks: taskModel[],
-    toColumnIndex: Number,
-    taskIndex: Number
-  ) => {
-    e.stopPropagation();
-    const type = e.dataTransfer.getData("type");
-    if (type === "task")
-      moveTask(e, toTasks, taskIndex ? taskIndex : toTasks.length);
-    else {
-      moveColumn(e, toColumnIndex);
-    }
   };
 
   let pickTask = (
@@ -98,7 +83,7 @@ const MainColumn: React.FC<Column> = (props) => {
         onDragStart={(e: React.DragEvent) => pickColumn(e, colIndex)}
         onDragOver={(e: React.DragEvent) => preventThisEvent(e)}
         onDragEnter={(e: React.DragEvent) => preventThisEvent(e)}
-        onDrop={(e: React.DragEvent) => moveColumn(e, colIndex)}
+        onDrop={(e: React.DragEvent) => moveColumn(e, Number(colIndex))}
       >
         <div className="title is-5 board-title">{column.name}</div>
 
