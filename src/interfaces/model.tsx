@@ -4,9 +4,12 @@ export interface taskModel {
   description: string;
 }
 
+export interface BaseColumn {
+  name: string;
+  tasks: taskModel[];
+}
+
 export interface Column {
-  column: {
-    name: string;
-    tasks: taskModel[];
-  };
+  column: BaseColumn;
+  colIndex: Number;
 }

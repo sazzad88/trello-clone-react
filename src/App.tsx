@@ -8,7 +8,7 @@ function App() {
     <section className="hero is-fullheight">
       <div className="hero-body">
         {columns.map((col, index) => (
-          <Column column={col} />
+          <Column column={col} colIndex={index} />
         ))}
       </div>
     </section>
