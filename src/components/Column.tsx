@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ColumnContext } from "../context/ColumnContext";
 import { Column, taskModel } from "../interfaces/model";
 import Task from "./Task";
 
 const MainColumn: React.FC<Column> = (props) => {
   let column = props.column,
     colIndex = props.colIndex;
+
+  const AppContext = useContext(ColumnContext);
+
+  let moveTaskOrColumn = (
+    e: React.DragEvent,
+    toTasks: taskModel[],
+    toColumnIndex: number,
+    taskIndex: number
+  ) => {
+    const type = e.dataTransfer.getData("type");
+    console.log("current task length : ", toTasks.length);
+    if (type === "task")
+      moveTask(e, taskIndex ? taskIndex : toTasks.length, toColumnIndex);
+    else {
+      moveColumn(e, toColumnIndex);
+    }
+  };
+  // console.log(AppContext);
 
   let pickColumn = (e: React.DragEvent, colIndex: Number) => {
     let EventTarget = e.target as HTMLTemplateElement;
@@ -17,7 +36,7 @@ const MainColumn: React.FC<Column> = (props) => {
 
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.dropEffect = "move";
-        e.dataTransfer.setData("column-index", String(colIndex));
+        e.dataTransfer.setData("from-column-index", String(colIndex));
         e.dataTransfer.setData("type", "column");
       }
     }
@@ -25,29 +44,30 @@ const MainColumn: React.FC<Column> = (props) => {
 
   let moveTask = (
     e: React.DragEvent,
-    toTasks: taskModel[],
-    toTaskIndex: Number
+
+    toTaskIndex: number,
+    toColumnIndex: number
   ) => {
-    //console.log("move task : ", e);
+    // console.log("move task : ");
     e.stopPropagation();
 
     const fromColumnIndex = e.dataTransfer.getData("from-column-index");
-    console.log(fromColumnIndex);
-    //const fromTasks = this.board.columns[fromColumnIndex].tasks;
+
     const taskIndex = e.dataTransfer.getData("from-task-index");
 
-    // this.$store.commit("MOVE_TASK", {
-    //   fromTasks,
-    //   toTasks,
-    //   fromTaskIndex: taskIndex,
-    //   toTaskIndex,
-    // });
+    props.move_task(
+      Number(taskIndex),
+      toTaskIndex,
+      Number(fromColumnIndex),
+      toColumnIndex
+    );
   };
 
   let moveColumn = (e: React.DragEvent, toColumnIndex: number) => {
-    console.log("drop column to : ", toColumnIndex);
+    //console.log("drop column to : ", toColumnIndex);
     const fromColumnIndex = e.dataTransfer.getData("from-column-index");
 
+    //console.log(`calling with from : ${toColumnIndex} , to : ${toColumnIndex}`);
     props.move_column(Number(fromColumnIndex), toColumnIndex);
   };
 
@@ -63,8 +83,11 @@ const MainColumn: React.FC<Column> = (props) => {
     let EventTarget = e.target as HTMLTemplateElement;
 
     if ("classList" in EventTarget) {
-      console.log(EventTarget.classList);
-      if (EventTarget.classList.contains("trello-column")) {
+      if (EventTarget.classList.contains("row-item")) {
+        console.log("pick task from : ", {
+          column: fromColumnIndex,
+          task: taskIndex,
+        });
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.dropEffect = "move";
         e.dataTransfer.setData("from-task-index", String(taskIndex));
@@ -83,7 +106,9 @@ const MainColumn: React.FC<Column> = (props) => {
         onDragStart={(e: React.DragEvent) => pickColumn(e, colIndex)}
         onDragOver={(e: React.DragEvent) => preventThisEvent(e)}
         onDragEnter={(e: React.DragEvent) => preventThisEvent(e)}
-        onDrop={(e: React.DragEvent) => moveColumn(e, Number(colIndex))}
+        onDrop={(e: React.DragEvent) =>
+          moveTaskOrColumn(e, column.tasks, Number(colIndex), 0)
+        }
       >
         <div className="title is-5 board-title">{column.name}</div>
 
@@ -96,7 +121,7 @@ const MainColumn: React.FC<Column> = (props) => {
               colIndex={colIndex}
               column={column}
               pickTask={pickTask}
-              moveTask={moveTask}
+              moveTaskOrColumn={moveTaskOrColumn}
               preventThisEvent={preventThisEvent}
             />
           ))}

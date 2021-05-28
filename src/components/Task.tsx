@@ -4,12 +4,17 @@ import { taskModel, BaseColumn } from "../interfaces/model";
 
 interface taskProps {
   task: taskModel;
-  colIndex: Number;
-  taskIndex: Number;
+  colIndex: number;
+  taskIndex: number;
   column: BaseColumn;
   preventThisEvent: (e: React.DragEvent) => void;
-  moveTask: (e: React.DragEvent, tasks: taskModel[], taskIndex: Number) => void;
-  pickTask: (e: React.DragEvent, taskIndex: Number, colIndex: Number) => void;
+  moveTaskOrColumn: (
+    e: React.DragEvent,
+    tasks: taskModel[],
+    columnIndex: number,
+    taskIndex: number
+  ) => void;
+  pickTask: (e: React.DragEvent, taskIndex: number, colIndex: number) => void;
 }
 
 const Task: React.FC<taskProps> = (props) => {
@@ -23,7 +28,12 @@ const Task: React.FC<taskProps> = (props) => {
       onDragOver={(e: React.DragEvent) => props.preventThisEvent(e)}
       onDragEnter={(e: React.DragEvent) => props.preventThisEvent(e)}
       onDrop={(e: React.DragEvent) =>
-        props.moveTask(e, props.column.tasks, props.taskIndex)
+        props.moveTaskOrColumn(
+          e,
+          props.column.tasks,
+          props.colIndex,
+          props.taskIndex
+        )
       }
       draggable="true"
       key={task.id}
