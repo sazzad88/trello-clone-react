@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { ColumnContext } from "../context/ColumnContext";
 import { Column, taskModel } from "../interfaces/model";
 import Task from "./Task";
+import AddTask from "./AddTask";
 
 const MainColumn: React.FC<Column> = (props) => {
   let column = props.column,
@@ -16,7 +17,7 @@ const MainColumn: React.FC<Column> = (props) => {
     taskIndex: number
   ) => {
     const type = e.dataTransfer.getData("type");
-    console.log("current task length : ", toTasks.length);
+    //console.log("current task length : ", toTasks.length);
     if (type === "task")
       moveTask(e, taskIndex ? taskIndex : toTasks.length, toColumnIndex);
     else {
@@ -32,7 +33,7 @@ const MainColumn: React.FC<Column> = (props) => {
       if (EventTarget.classList.contains("trello-column")) {
         //console.log("drag start column");
 
-        console.log("pick column from :", colIndex);
+        // console.log("pick column from :", colIndex);
 
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.dropEffect = "move";
@@ -125,6 +126,7 @@ const MainColumn: React.FC<Column> = (props) => {
               preventThisEvent={preventThisEvent}
             />
           ))}
+          <AddTask columnIndex={colIndex} />
         </div>
       </div>
     </>

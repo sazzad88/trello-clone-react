@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import "./App.css";
 import DefaultBoard from "./base-board";
 import Column from "./components/Column";
+import { uuid } from "./utils";
 
 import { ColumnContext } from "./context/ColumnContext";
 import { taskModel } from "./interfaces/model";
@@ -9,7 +10,7 @@ import { taskModel } from "./interfaces/model";
 function App() {
   const [columns, setColumns] = useState(DefaultBoard.columns);
 
-  let move_column = (fromColumnIndex: number, toColumnIndex: number) => {
+  const move_column = (fromColumnIndex: number, toColumnIndex: number) => {
     let columnList = [...columns];
 
     // console.log({
@@ -23,7 +24,7 @@ function App() {
     setColumns(columnList);
   };
 
-  let move_task = (
+  const move_task = (
     fromTaskIndex: number,
     toTaskIndex: number,
     fromColumnIndex: number,
@@ -50,9 +51,24 @@ function App() {
     setColumns(columnList);
   };
 
+  const addTask = (ColumnIndex: number, title: string) => {
+    let columnList = [...columns];
+    let currentTaks = [...columns[ColumnIndex].tasks];
+
+    currentTaks.push({
+      id: uuid(),
+      name: title,
+      description: "",
+    });
+
+    columnList[ColumnIndex].tasks = currentTaks;
+
+    setColumns(columnList);
+  };
+
   return (
     <ColumnContext.Provider
-      value={{ columns: columns, move_column: move_column }}
+      value={{ columns: columns, move_column: move_column, addTask }}
     >
       <section className="hero is-fullheight">
         <div className="hero-body">
@@ -64,6 +80,21 @@ function App() {
               colIndex={index}
             />
           ))}
+
+          <div className="trello-column">
+            <div className="field">
+              <div className="control has-icons-right">
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="Add new column"
+                />
+                <span className="icon is-small is-right">
+                  <i className="fas fa-plus"></i>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </ColumnContext.Provider>
