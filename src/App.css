@@ -22,6 +22,10 @@
   left: 0;
 }
 
+.hero.is-fullheight .hero-body {
+  align-items: flex-start !important;
+}
+
 .trello-column {
   width: 300px;
   margin: 0 4px;
@@ -74,6 +78,8 @@
   background: #f8f5f5;
 }
 
-.add-task-container a.open {
-  /* padding :  */
+.add-column-container {
+  padding: 3px;
+  background-color: #ebecf0;
+  border-radius: 2px;
 }
