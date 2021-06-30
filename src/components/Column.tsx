@@ -116,7 +116,7 @@ const MainColumn: React.FC<Column> = (props) => {
         <div className="task-container">
           {column.tasks.map((task, taskIndex) => (
             <Task
-              key={`${task.id}-${colIndex}`}
+              key={`${task.slug}-${colIndex}`}
               task={task}
               taskIndex={taskIndex}
               colIndex={colIndex}

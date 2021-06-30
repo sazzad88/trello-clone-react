@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
 import { ColumnContext } from "../context/ColumnContext";
-// import styles from "./Pagination.module.css";
 
-function Pagination({
+function AddTask({
   columnIndex,
 }: //setPageNum
 {
@@ -86,4 +85,4 @@ function Pagination({
   );
 }
 
-export default Pagination;
+export default AddTask;

@@ -1,14 +1,50 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import DefaultBoard from "./base-board";
 import Column from "./components/Column";
-import { uuid } from "./utils";
-
+import { uuid, slugify } from "./utils";
+import { useParams, useRouteMatch } from "react-router-dom";
 import { ColumnContext } from "./context/ColumnContext";
-import { taskModel } from "./interfaces/model";
+import TaskModal from "./components/TaskModal";
+import { BaseColumn, taskModel } from "./interfaces/model";
 
 function App() {
   const [columns, setColumns] = useState(DefaultBoard.columns);
+  const [openTaskModal, setOpenTaskModal] = useState<boolean>(false);
+  const [selectedTask, setSelectedTask] = useState<taskModel | {}>({});
+
+  let { path, url } = useRouteMatch();
+  let params: {
+    columnId: string;
+    taskSlug: string;
+  } = useParams();
+
+  useEffect(() => {
+    console.log({
+      path,
+      url,
+      params,
+      // taskId,
+    });
+
+    if (params.columnId && params.taskSlug) {
+      let selectedColumn = columns.find(
+        (item: BaseColumn) => item.id === params.columnId
+      );
+      console.log(selectedColumn);
+      if (selectedColumn) {
+        let taskItem = selectedColumn.tasks.find(
+          (item: taskModel) => item.slug === params.taskSlug
+        );
+
+        console.log(taskItem);
+        if (taskItem) {
+          setSelectedTask(taskItem);
+        }
+      }
+      setOpenTaskModal(true);
+    }
+  });
 
   const move_column = (fromColumnIndex: number, toColumnIndex: number) => {
     let columnList = [...columns];
@@ -56,7 +92,7 @@ function App() {
     let currentTaks = [...columns[ColumnIndex].tasks];
 
     currentTaks.push({
-      id: uuid(),
+      slug: slugify(title),
       name: title,
       description: "",
     });
@@ -95,6 +131,10 @@ function App() {
               </div>
             </div>
           </div>
+
+          {openTaskModal ? (
+            <TaskModal task={selectedTask as taskModel} />
+          ) : null}
         </div>
       </section>
     </ColumnContext.Provider>

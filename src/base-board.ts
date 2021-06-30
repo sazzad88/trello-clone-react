@@ -1,44 +1,24 @@
 import { uuid } from "./utils";
 
 export default {
-  name: "worshop",
   columns: [
     {
-      name: "todo",
+      name: "Todo List",
+      id: uuid(),
       tasks: [
         {
-          id: uuid(),
-          name: "first task",
+          name: "First Task",
+          slug: "first-task",
           description: "",
         },
         {
-          id: uuid(),
-          name: "second task",
+          name: "Second task",
+          slug: "second-task",
           description: "second task detail",
         },
         {
-          id: uuid(),
           name: "third task",
-          description: "",
-        },
-      ],
-    },
-    {
-      name: "in-progress",
-      tasks: [
-        {
-          id: uuid(),
-          name: "first task",
-          description: "",
-        },
-      ],
-    },
-    {
-      name: "done",
-      tasks: [
-        {
-          id: uuid(),
-          name: "first task",
+          slug: "third-task",
           description: "",
         },
       ],

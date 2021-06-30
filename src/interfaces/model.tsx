@@ -1,11 +1,12 @@
 export interface taskModel {
-  id: string;
   name: string;
+  slug: string;
   description: string;
 }
 
 export interface BaseColumn {
   name: string;
+  id: string;
   tasks: taskModel[];
 }
 

@@ -1,6 +1,7 @@
 import React from "react";
 
 import { taskModel, BaseColumn } from "../interfaces/model";
+import { useHistory } from "react-router-dom";
 
 interface taskProps {
   task: taskModel;
@@ -19,6 +20,11 @@ interface taskProps {
 
 const Task: React.FC<taskProps> = (props) => {
   let task = props.task;
+  let history = useHistory();
+
+  const redirect = (taskSlug: string) => {
+    history.push(`/${props.column.id}/${taskSlug}`);
+  };
 
   return (
     <div
@@ -36,7 +42,8 @@ const Task: React.FC<taskProps> = (props) => {
         )
       }
       draggable="true"
-      key={task.id}
+      onClick={() => redirect(task.slug)}
+      key={task.slug}
       v-for="(task, taskIndex) in column.tasks"
       className="card row-item"
     >

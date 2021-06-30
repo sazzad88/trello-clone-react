@@ -3,10 +3,25 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "bulma/css/bulma.min.css";
 import reportWebVitals from "./reportWebVitals";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Route path="/">
+        <App />
+      </Route>
+      <Route path="/:columnId/:taskSlug">
+        <App />
+      </Route>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );
