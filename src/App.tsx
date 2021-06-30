@@ -64,19 +64,33 @@ function App() {
     setColumns(columnList);
   };
 
-  const addTask = (ColumnIndex: number, title: string) => {
+  const addTask = (ColumnIndex: number, title: string): Promise<boolean> => {
     let columnList = [...columns];
-    let currentTaks = [...columns[ColumnIndex].tasks];
+    let currentTasks = [...columnList[ColumnIndex].tasks];
 
-    currentTaks.push({
-      slug: slugify(title),
-      name: title,
-      description: "",
+    return new Promise((resolve, reject) => {
+      let newSlug = slugify(title);
+
+      let notUnique = currentTasks.find(
+        (item: taskModel) => item.slug === newSlug
+      );
+
+      if (notUnique) {
+        reject(false);
+      } else {
+        currentTasks.push({
+          slug: slugify(title),
+          name: title,
+          description: "",
+        });
+
+        columnList[ColumnIndex].tasks = currentTasks;
+
+        setColumns(columnList);
+
+        resolve(true);
+      }
     });
-
-    columnList[ColumnIndex].tasks = currentTaks;
-
-    setColumns(columnList);
   };
 
   const addColumn = (title: string) => {

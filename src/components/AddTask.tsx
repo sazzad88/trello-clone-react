@@ -12,17 +12,32 @@ function AddTask({
 
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
-  const [formError, setFormError] = useState<boolean>(false);
+  const [formError, setFormError] = useState<{
+    error: boolean;
+    message: string;
+  }>({ error: false, message: "" });
 
   const saveTask = () => {
     if (title.trim().length < 2) {
-      setFormError(true);
+      setFormError({
+        error: true,
+        message: "Task can't be empty",
+      });
       return;
     }
     let savedTitle = title;
-    AppContext.addTask(columnIndex, savedTitle);
-    setTitle("");
-    setOpenInput(false);
+
+    AppContext.addTask(columnIndex, savedTitle)
+      .then(() => {
+        setTitle("");
+        setOpenInput(false);
+      })
+      .catch(() => {
+        setFormError({
+          error: true,
+          message: "This task already exists on this column",
+        });
+      });
   };
 
   return (
@@ -34,14 +49,20 @@ function AddTask({
               <input
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setTitle(event.target.value);
-                  setFormError(false);
+                  setFormError({
+                    error: false,
+                    message: "",
+                  });
                 }}
                 value={title}
-                className={`input ${formError ? "is-danger" : ""}`}
+                className={`input ${formError.error ? "is-danger" : ""}`}
                 type="text"
                 placeholder="Task title"
               />
             </div>
+            {formError.message ? (
+              <p className="help is-danger">{formError.message}</p>
+            ) : null}
           </div>
           <div className="field is-grouped">
             <div className="control">
@@ -54,6 +75,10 @@ function AddTask({
                 onClick={() => {
                   setOpenInput(false);
                   setTitle("");
+                  setFormError({
+                    error: true,
+                    message: "",
+                  });
                 }}
                 className="button is-link is-light is-small"
               >
