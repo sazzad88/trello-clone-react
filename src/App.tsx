@@ -137,22 +137,28 @@ function App() {
       let newTask = taskIndex !== -1 ? selectedColumn.tasks[taskIndex] : null,
         newTaskSlug = slugify(value);
 
-      let duplicate = selectedColumn.tasks.find(
-        (item: taskModel, index: number) =>
-          item.slug === newTaskSlug && index !== taskIndex
-      );
+      let duplicate =
+        name === "name"
+          ? selectedColumn.tasks.find(
+              (item: taskModel, index: number) =>
+                item.slug === newTaskSlug && index !== taskIndex
+            )
+          : false;
 
       if (newTask && !duplicate) {
         newTask[name] = value;
-        newTask.slug = newTaskSlug;
+
+        if (name === "name") newTask.slug = newTaskSlug;
 
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
 
-        setTimeout(() => {
-          history.push(`/${selectedColumn!.id}/${newTask!.slug}`);
-        }, 400);
+        if (name === "name") {
+          setTimeout(() => {
+            history.push(`/${selectedColumn!.id}/${newTask!.slug}`);
+          }, 300);
+        }
 
         return true;
       }

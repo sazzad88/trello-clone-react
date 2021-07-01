@@ -78,6 +78,10 @@
   background: #f8f5f5;
 }
 
+textarea:read-only {
+  background-color: #eaecef;
+}
+
 .add-column-container {
   padding: 3px;
   background-color: #ebecf0;

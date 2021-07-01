@@ -3,6 +3,7 @@ import { ColumnContext } from "../context/ColumnContext";
 import { useHistory } from "react-router-dom";
 import { taskModel } from "../interfaces/model";
 import TaskHeader from "./Utility/TaskHeader";
+import TaskDescription from "./Utility/TaskDescription";
 
 function AddTask({
   task,
@@ -40,12 +41,7 @@ function AddTask({
                 <div className="content">
                   <div v-if="task" className="title is-5">
                     <TaskHeader task={task} />
-                    <div className="field">
-                      <textarea
-                        className="textarea"
-                        value={task.description}
-                      ></textarea>
-                    </div>
+                    <TaskDescription task={task} />
                   </div>
                 </div>
               </div>
