@@ -3,13 +3,14 @@ import "./App.css";
 import DefaultBoard from "./base-board";
 import Column from "./components/Column";
 import { uuid, slugify } from "./utils";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { ColumnContext } from "./context/ColumnContext";
 import TaskModal from "./components/TaskModal";
 import AddColumn from "./components/AddColumn";
 import { BaseColumn, taskModel } from "./interfaces/model";
 
 function App() {
+  let history = useHistory();
   const [columns, setColumns] = useState(DefaultBoard.columns);
   const [openTaskModal, setOpenTaskModal] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<taskModel | {}>({});
@@ -31,9 +32,9 @@ function App() {
 
         if (taskItem) {
           setSelectedTask(taskItem);
+          setOpenTaskModal(true);
         }
       }
-      setOpenTaskModal(true);
     }
   });
 
@@ -106,9 +107,69 @@ function App() {
     setColumns(columnList);
   };
 
+  const saveFixedTaskItem = (
+    value: string,
+    name: "name" | "description",
+    taskSlug: string,
+    columnId: string
+  ): boolean => {
+    let currentColumns = [...columns],
+      columnIndex = -1;
+
+    currentColumns.forEach((item: BaseColumn, index: number) => {
+      if (item.id === columnId) {
+        columnIndex = index;
+      }
+    });
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    if (selectedColumn) {
+      let taskIndex = -1;
+
+      selectedColumn.tasks.forEach((item: taskModel, index: number) => {
+        if (item.slug === taskSlug) {
+          taskIndex = index;
+        }
+      });
+
+      let newTask = taskIndex !== -1 ? selectedColumn.tasks[taskIndex] : null,
+        newTaskSlug = slugify(value);
+
+      let duplicate = selectedColumn.tasks.find(
+        (item: taskModel, index: number) =>
+          item.slug === newTaskSlug && index !== taskIndex
+      );
+
+      if (newTask && !duplicate) {
+        newTask[name] = value;
+        newTask.slug = newTaskSlug;
+
+        currentColumns[columnIndex].tasks[taskIndex] = newTask;
+
+        setColumns(currentColumns);
+
+        setTimeout(() => {
+          history.push(`/${selectedColumn!.id}/${newTask!.slug}`);
+        }, 400);
+
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   return (
     <ColumnContext.Provider
-      value={{ columns: columns, move_column: move_column, addTask, addColumn }}
+      value={{
+        columns: columns,
+        move_column: move_column,
+        addTask,
+        addColumn,
+        saveFixedTaskItem,
+      }}
     >
       <section className="hero is-fullheight">
         <div className="hero-body">

@@ -83,3 +83,13 @@
   background-color: #ebecf0;
   border-radius: 2px;
 }
+
+.modal-content .box {
+  background: #f0f3fa !important;
+}
+
+@media screen and (min-width: 769px) {
+  .modal-content {
+    width: 900px !important;
+  }
+}

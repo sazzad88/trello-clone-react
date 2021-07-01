@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { ColumnContext } from "../context/ColumnContext";
 import { useHistory } from "react-router-dom";
 import { taskModel } from "../interfaces/model";
+import TaskHeader from "./Utility/TaskHeader";
 
 function AddTask({
   task,
@@ -32,24 +33,25 @@ function AddTask({
     <div className="modal is-active">
       <div className="modal-background"></div>
       <div className="modal-content">
-        <div className="box">
-          <article className="media">
-            <div className="media-content">
-              <div className="content">
-                <div v-if="task" className="title is-5">
-                  <div className="field">
-                    <input className="input" value={task.name} />
-                  </div>
-                  <div className="field">
-                    <textarea
-                      className="textarea"
-                      value={task.description}
-                    ></textarea>
+        <div className="box columns">
+          <div className="column is-four-fifths">
+            <article className="media">
+              <div className="media-content">
+                <div className="content">
+                  <div v-if="task" className="title is-5">
+                    <TaskHeader task={task} />
+                    <div className="field">
+                      <textarea
+                        className="textarea"
+                        value={task.description}
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
+          </div>
+          <div className="column">Other options</div>
         </div>
       </div>
       <button
