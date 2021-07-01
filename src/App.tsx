@@ -44,6 +44,29 @@ function App() {
     }
   });
 
+  const extractColumnAndTaskIndex = (columnId: string, taskSlug: string) => {
+    let currentColumns = [...columns],
+      columnIndex = -1,
+      taskIndex = -1;
+
+    columnIndex = currentColumns.findIndex(
+      (item: BaseColumn) => item.id === columnId
+    );
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    // console.log(selectedColumn);
+
+    if (selectedColumn) {
+      taskIndex = selectedColumn.tasks.findIndex(
+        (item: taskModel, index: number) => item.slug === taskSlug
+      );
+    }
+
+    return [columnIndex, taskIndex];
+  };
+
   const move_column = (fromColumnIndex: number, toColumnIndex: number) => {
     let columnList = [...columns];
 
@@ -124,26 +147,12 @@ function App() {
     columnId: string
   ): boolean => {
     let currentColumns = [...columns],
-      columnIndex = -1;
-
-    currentColumns.forEach((item: BaseColumn, index: number) => {
-      if (item.id === columnId) {
-        columnIndex = index;
-      }
-    });
+      [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
 
     let selectedColumn =
       columnIndex !== -1 ? currentColumns[columnIndex] : null;
 
     if (selectedColumn) {
-      let taskIndex = -1;
-
-      selectedColumn.tasks.forEach((item: taskModel, index: number) => {
-        if (item.slug === taskSlug) {
-          taskIndex = index;
-        }
-      });
-
       let newTask = taskIndex !== -1 ? selectedColumn.tasks[taskIndex] : null,
         newTaskSlug = slugify(value);
 
@@ -183,13 +192,7 @@ function App() {
     columnId: string
   ) => {
     let currentColumns = [...columns],
-      columnIndex = -1;
-
-    currentColumns.forEach((item: BaseColumn, index: number) => {
-      if (item.id === columnId) {
-        columnIndex = index;
-      }
-    });
+      [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
 
     let selectedColumn =
       columnIndex !== -1 ? currentColumns[columnIndex] : null;
@@ -197,21 +200,12 @@ function App() {
     // console.log(selectedColumn);
 
     if (selectedColumn) {
-      let taskIndex = -1;
-
-      selectedColumn.tasks.forEach((item: taskModel, index: number) => {
-        if (item.slug === taskSlug) {
-          taskIndex = index;
-        }
-      });
-
       let newTask =
         taskIndex !== -1
           ? (selectedColumn.tasks[taskIndex] as taskModel)
           : null;
 
       if (newTask) {
-        // console.log(newTask);
         let newChecklist: CheckList = {
           id: uuid(),
           title,
@@ -223,8 +217,6 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
-
-        console.log(currentColumns[columnIndex].tasks[taskIndex]);
       }
     }
   };
@@ -236,7 +228,7 @@ function App() {
     taskSlug: string
   ) => {
     let currentColumns = [...columns],
-      columnIndex = -1;
+      [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
 
     currentColumns.forEach((item: BaseColumn, index: number) => {
       if (item.id === columnId) {
@@ -247,17 +239,7 @@ function App() {
     let selectedColumn =
       columnIndex !== -1 ? currentColumns[columnIndex] : null;
 
-    // console.log(selectedColumn);
-
     if (selectedColumn) {
-      let taskIndex = -1;
-
-      selectedColumn.tasks.forEach((item: taskModel, index: number) => {
-        if (item.slug === taskSlug) {
-          taskIndex = index;
-        }
-      });
-
       let newTask =
         taskIndex !== -1
           ? (selectedColumn.tasks[taskIndex] as taskModel)
@@ -278,8 +260,6 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
-
-        // console.log(currentColumns[columnIndex].tasks[taskIndex]);
       }
     }
   };
