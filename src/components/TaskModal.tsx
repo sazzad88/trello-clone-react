@@ -6,6 +6,7 @@ import TaskHeader from "./Utility/TaskHeader";
 import TaskDescription from "./Utility/TaskDescription";
 import AddToCard from "./Utility/AddToCard";
 import CardActions from "./Utility/CardActions";
+import TaskActivies from "./TaskActivities/TaskActivities";
 
 function AddTask({ task }: { task: taskModel }) {
   let history = useHistory();
@@ -21,6 +22,7 @@ function AddTask({ task }: { task: taskModel }) {
                 <div className="content">
                   <TaskHeader task={task} />
                   <TaskDescription task={task} />
+                  <TaskActivies task={task} />
                 </div>
               </div>
             </article>

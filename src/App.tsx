@@ -229,6 +229,61 @@ function App() {
     }
   };
 
+  const addCheckListItem = (
+    checkListId: string,
+    title: string,
+    columnId: string,
+    taskSlug: string
+  ) => {
+    let currentColumns = [...columns],
+      columnIndex = -1;
+
+    currentColumns.forEach((item: BaseColumn, index: number) => {
+      if (item.id === columnId) {
+        columnIndex = index;
+      }
+    });
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    // console.log(selectedColumn);
+
+    if (selectedColumn) {
+      let taskIndex = -1;
+
+      selectedColumn.tasks.forEach((item: taskModel, index: number) => {
+        if (item.slug === taskSlug) {
+          taskIndex = index;
+        }
+      });
+
+      let newTask =
+        taskIndex !== -1
+          ? (selectedColumn.tasks[taskIndex] as taskModel)
+          : null;
+
+      if (newTask) {
+        let activityIndex = newTask.activity.findIndex(
+          (item: CheckList) =>
+            item.activityType === "Checklist" && item.id === checkListId
+        );
+
+        newTask.activity[activityIndex].content.push({
+          id: uuid(),
+          title,
+          completed: false,
+        });
+
+        currentColumns[columnIndex].tasks[taskIndex] = newTask;
+
+        setColumns(currentColumns);
+
+        // console.log(currentColumns[columnIndex].tasks[taskIndex]);
+      }
+    }
+  };
+
   return (
     <ColumnContext.Provider
       value={{
@@ -238,6 +293,7 @@ function App() {
         addColumn,
         saveFixedTaskItem,
         AddNewCheckList,
+        addCheckListItem,
       }}
     >
       <section className="hero is-fullheight">
