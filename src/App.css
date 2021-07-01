@@ -102,8 +102,19 @@
   background-color: #fefefe;
   position: absolute;
   top: 35px;
-  right: 00px;
+  right: 0px;
   width: 200px;
+  border-radius: 4px;
+  padding: 5px;
+  border: 1px solid lightgray;
+}
+
+.warning-modal {
+  background-color: #fefefe;
+  position: absolute;
+  top: 15px;
+  right: 0px;
+  width: 250px;
   border-radius: 4px;
   padding: 5px;
   border: 1px solid lightgray;

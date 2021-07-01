@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { ColumnContext } from "../../../context/ColumnContext";
 
 import { CheckList, ChecklistItem } from "../../../interfaces/model";
+import CheckListItem from "./CheckListItem";
 import { useParams } from "react-router-dom";
 
 function List({ data }: { data: CheckList }) {
@@ -16,8 +17,34 @@ function List({ data }: { data: CheckList }) {
 
   const [formError, setFormError] = useState<string>("");
 
+  const deleteItem = (checkboxItemIndex: number, checkListId: string) => {
+    console.log("delete ", checkboxItemIndex);
+    AppContext.deleteCheckListItem(
+      checkListId,
+      checkboxItemIndex,
+      params.columnId,
+      params.taskSlug
+    );
+  };
+
+  const updateCompleted = (
+    value: boolean,
+    checkboxItemIndex: number,
+    checkListId: string
+  ) => {
+    //console.log(value, id, params.columnId, params.taskSlug);
+    AppContext.updateCheckListItem(
+      "completed",
+      value,
+      checkListId,
+      checkboxItemIndex,
+      params.columnId,
+      params.taskSlug
+    );
+  };
+
   const addItem = () => {
-    if (title.trim().length < 2) {
+    if (title.trim().length < 1) {
       setFormError("Item can't be empty");
       return;
     }
@@ -33,20 +60,48 @@ function List({ data }: { data: CheckList }) {
     setTitle("");
   };
 
+  const percentage =
+    (data.content.filter((item: ChecklistItem) => item.completed).length /
+      data.content.length) *
+    100;
+
   return (
     <>
       <div className="field">
         <label className="label">{data.title}</label>
       </div>
 
-      {data.content.map((item: ChecklistItem) => (
-        <div className="field">
-          <label key={item.id} className="checkbox">
-            <input type="checkbox" />
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            {item.title}
-          </label>
+      {data.content.length > 0 ? (
+        <div style={{ margin: "10px 0px" }}>
+          <div style={{ width: "10%", display: "inline-block" }}>
+            {percentage.toFixed(2)}%
+          </div>
+
+          <div style={{ width: "90%", display: "inline-block" }}>
+            <progress
+              // style={{ display: "inline-block" }}
+              className="progress is-info"
+              value={
+                (data.content.filter((item: ChecklistItem) => item.completed)
+                  .length /
+                  data.content.length) *
+                100
+              }
+              max="100"
+            ></progress>
+          </div>
         </div>
+      ) : null}
+
+      {data.content.map((item: ChecklistItem, index: number) => (
+        <CheckListItem
+          key={item.id}
+          index={index}
+          updateCompleted={updateCompleted}
+          item={item}
+          id={data.id}
+          deleteItem={deleteItem}
+        />
       ))}
 
       {openNew ? (

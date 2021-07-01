@@ -264,6 +264,100 @@ function App() {
     }
   };
 
+  const updateCheckListItem = (
+    field: "title" | "completed",
+    value: boolean | string,
+    checkListId: string,
+    checkboxItemIndex: number,
+    columnId: string,
+    taskSlug: string
+  ) => {
+    let currentColumns = [...columns],
+      [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
+
+    currentColumns.forEach((item: BaseColumn, index: number) => {
+      if (item.id === columnId) {
+        columnIndex = index;
+      }
+    });
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    if (selectedColumn) {
+      let newTask =
+        taskIndex !== -1
+          ? (selectedColumn.tasks[taskIndex] as taskModel)
+          : null;
+
+      if (newTask) {
+        let activityIndex = newTask.activity.findIndex(
+          (item: CheckList) =>
+            item.activityType === "Checklist" && item.id === checkListId
+        );
+
+        if (activityIndex !== -1) {
+          console.log(
+            newTask.activity[activityIndex].content[checkboxItemIndex][field]
+          );
+
+          if (field === "completed")
+            newTask.activity[activityIndex].content[
+              checkboxItemIndex
+            ].completed = value as boolean;
+          else
+            newTask.activity[activityIndex].content[checkboxItemIndex].title =
+              value as string;
+
+          currentColumns[columnIndex].tasks[taskIndex] = newTask;
+
+          setColumns(currentColumns);
+        }
+      }
+    }
+  };
+
+  const deleteCheckListItem = (
+    checkListId: string,
+    checkboxItemIndex: number,
+    columnId: string,
+    taskSlug: string
+  ) => {
+    let currentColumns = [...columns],
+      [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
+
+    currentColumns.forEach((item: BaseColumn, index: number) => {
+      if (item.id === columnId) {
+        columnIndex = index;
+      }
+    });
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    if (selectedColumn) {
+      let newTask =
+        taskIndex !== -1
+          ? (selectedColumn.tasks[taskIndex] as taskModel)
+          : null;
+
+      if (newTask) {
+        let activityIndex = newTask.activity.findIndex(
+          (item: CheckList) =>
+            item.activityType === "Checklist" && item.id === checkListId
+        );
+
+        if (activityIndex !== -1) {
+          newTask.activity[activityIndex].content.splice(checkboxItemIndex, 1);
+
+          currentColumns[columnIndex].tasks[taskIndex] = newTask;
+
+          setColumns(currentColumns);
+        }
+      }
+    }
+  };
+
   return (
     <ColumnContext.Provider
       value={{
@@ -274,6 +368,8 @@ function App() {
         saveFixedTaskItem,
         AddNewCheckList,
         addCheckListItem,
+        updateCheckListItem,
+        deleteCheckListItem,
       }}
     >
       <section className="hero is-fullheight">
