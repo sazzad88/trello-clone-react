@@ -1,7 +1,30 @@
+export interface Comment {
+  content: string;
+  id: string;
+  createdAt: string;
+}
+
+export type AllowedActivity = "Checklist";
+
+export interface ChecklistItem {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
+export interface CheckList {
+  id: string;
+  title: string;
+  activityType: AllowedActivity;
+  content: ChecklistItem[];
+}
+
 export interface taskModel {
   name: string;
   slug: string;
   description: string;
+  activity: CheckList[];
+  comments: Comment[];
 }
 
 export interface BaseColumn {

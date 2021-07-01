@@ -78,6 +78,37 @@
   background: #f8f5f5;
 }
 
+.options-container {
+  display: flex;
+  align-items: center;
+  margin: 15px 0px;
+}
+
+.options hr {
+  border: 1px dashed lightblue;
+}
+
+.options-title {
+  text-transform: uppercase;
+  color: gray;
+  font-weight: bold;
+}
+
+.option-item {
+  position: relative;
+}
+
+.options-modal {
+  background-color: #fefefe;
+  position: absolute;
+  top: 35px;
+  right: 00px;
+  width: 200px;
+  border-radius: 4px;
+  padding: 5px;
+  border: 1px solid lightgray;
+}
+
 textarea:read-only {
   background-color: #eaecef;
 }

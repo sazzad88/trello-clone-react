@@ -7,11 +7,17 @@ import { useParams, useHistory } from "react-router-dom";
 import { ColumnContext } from "./context/ColumnContext";
 import TaskModal from "./components/TaskModal";
 import AddColumn from "./components/AddColumn";
-import { BaseColumn, taskModel } from "./interfaces/model";
+import {
+  BaseColumn,
+  taskModel,
+  CheckList,
+  ChecklistItem,
+  Comment,
+} from "./interfaces/model";
 
 function App() {
   let history = useHistory();
-  const [columns, setColumns] = useState(DefaultBoard.columns);
+  const [columns, setColumns] = useState<BaseColumn[]>(DefaultBoard.columns);
   const [openTaskModal, setOpenTaskModal] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<taskModel | {}>({});
   let params: {
@@ -66,8 +72,8 @@ function App() {
   };
 
   const addTask = (ColumnIndex: number, title: string): Promise<boolean> => {
-    let columnList = [...columns];
-    let currentTasks = [...columnList[ColumnIndex].tasks];
+    let columnList: BaseColumn[] = [...columns];
+    let currentTasks: taskModel[] = [...columnList[ColumnIndex].tasks];
 
     return new Promise((resolve, reject) => {
       let newSlug = slugify(title);
@@ -79,10 +85,14 @@ function App() {
       if (notUnique) {
         reject(false);
       } else {
+        let activity: CheckList[] = [];
+
         currentTasks.push({
           slug: slugify(title),
           name: title,
           description: "",
+          activity: [],
+          comments: [],
         });
 
         columnList[ColumnIndex].tasks = currentTasks;
@@ -167,6 +177,58 @@ function App() {
     return false;
   };
 
+  const AddNewCheckList = (
+    title: string,
+    taskSlug: string,
+    columnId: string
+  ) => {
+    let currentColumns = [...columns],
+      columnIndex = -1;
+
+    currentColumns.forEach((item: BaseColumn, index: number) => {
+      if (item.id === columnId) {
+        columnIndex = index;
+      }
+    });
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    // console.log(selectedColumn);
+
+    if (selectedColumn) {
+      let taskIndex = -1;
+
+      selectedColumn.tasks.forEach((item: taskModel, index: number) => {
+        if (item.slug === taskSlug) {
+          taskIndex = index;
+        }
+      });
+
+      let newTask =
+        taskIndex !== -1
+          ? (selectedColumn.tasks[taskIndex] as taskModel)
+          : null;
+
+      if (newTask) {
+        // console.log(newTask);
+        let newChecklist: CheckList = {
+          id: uuid(),
+          title,
+          activityType: "Checklist",
+          content: [],
+        };
+        newTask.activity.push(newChecklist);
+
+        currentColumns[columnIndex].tasks[taskIndex] = newTask;
+
+        setColumns(currentColumns);
+
+        console.log(currentColumns[columnIndex].tasks[taskIndex]);
+      }
+    }
+  };
+
   return (
     <ColumnContext.Provider
       value={{
@@ -175,6 +237,7 @@ function App() {
         addTask,
         addColumn,
         saveFixedTaskItem,
+        AddNewCheckList,
       }}
     >
       <section className="hero is-fullheight">

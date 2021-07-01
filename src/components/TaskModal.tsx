@@ -1,34 +1,14 @@
-import React, { useState, useContext } from "react";
-import { ColumnContext } from "../context/ColumnContext";
+import React from "react";
+
 import { useHistory } from "react-router-dom";
 import { taskModel } from "../interfaces/model";
 import TaskHeader from "./Utility/TaskHeader";
 import TaskDescription from "./Utility/TaskDescription";
+import AddToCard from "./Utility/AddToCard";
+import CardActions from "./Utility/CardActions";
 
-function AddTask({
-  task,
-}: //setPageNum
-{
-  task: taskModel;
-  //setPageNum: (id: number) => void
-}) {
-  const AppContext = useContext(ColumnContext);
+function AddTask({ task }: { task: taskModel }) {
   let history = useHistory();
-
-  //   const [openInput, setOpenInput] = useState<boolean>(false);
-  //   const [title, setTitle] = useState<string>("");
-  //   const [formError, setFormError] = useState<boolean>(false);
-
-  //   const saveTask = () => {
-  //     if (title.trim().length < 2) {
-  //       setFormError(true);
-  //       return;
-  //     }
-  //     let savedTitle = title;
-  //     AppContext.addTask(columnIndex, savedTitle);
-  //     setTitle("");
-  //     setOpenInput(false);
-  //   };
 
   return (
     <div className="modal is-active">
@@ -39,15 +19,17 @@ function AddTask({
             <article className="media">
               <div className="media-content">
                 <div className="content">
-                  <div v-if="task" className="title is-5">
-                    <TaskHeader task={task} />
-                    <TaskDescription task={task} />
-                  </div>
+                  <TaskHeader task={task} />
+                  <TaskDescription task={task} />
                 </div>
               </div>
             </article>
           </div>
-          <div className="column">Other options</div>
+          <div className="column options">
+            <AddToCard task={task} />
+            <hr />
+            <CardActions task={task} />
+          </div>
         </div>
       </div>
       <button
