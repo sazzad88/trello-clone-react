@@ -112,12 +112,18 @@
 .warning-modal {
   background-color: #fefefe;
   position: absolute;
-  top: 15px;
+  top: -15px;
   right: 0px;
   width: 250px;
   border-radius: 4px;
   padding: 5px;
   border: 1px solid lightgray;
+}
+
+.warning-modal p {
+  text-align: left;
+  width: 100%;
+  font-size: 14px;
 }
 
 textarea:read-only {
@@ -137,5 +143,9 @@ textarea:read-only {
 @media screen and (min-width: 769px) {
   .modal-content {
     width: 900px !important;
+  }
+
+  .modal-content .box {
+    min-height: 500px;
   }
 }

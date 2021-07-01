@@ -15,22 +15,24 @@ function AddTask({ task }: { task: taskModel }) {
     <div className="modal is-active">
       <div className="modal-background"></div>
       <div className="modal-content">
-        <div className="box columns">
-          <div className="column is-four-fifths">
-            <article className="media">
-              <div className="media-content">
-                <div className="content">
-                  <TaskHeader task={task} />
-                  <TaskDescription task={task} />
-                  <TaskActivies task={task} />
+        <div className="box ">
+          <div className="columns">
+            <div className="column is-four-fifths">
+              <article className="media">
+                <div className="media-content">
+                  <div className="content">
+                    <TaskHeader task={task} />
+                    <TaskDescription task={task} />
+                    <TaskActivies task={task} />
+                  </div>
                 </div>
-              </div>
-            </article>
-          </div>
-          <div className="column options">
-            <AddToCard task={task} />
-            <hr />
-            <CardActions task={task} />
+              </article>
+            </div>
+            <div className="column options">
+              <AddToCard task={task} />
+              <hr />
+              <CardActions task={task} />
+            </div>
           </div>
         </div>
       </div>

@@ -52,7 +52,8 @@ function List({
           <div style={{ position: "relative" }}>
             <div className="warning-modal">
               <p>
-                Do you want to delete this item? This action is irreversible
+                Do you want to delete this item?
+                <br /> This action is irreversible
               </p>
               <div className="field is-grouped" style={{ padding: "5px" }}>
                 <div className="control">
