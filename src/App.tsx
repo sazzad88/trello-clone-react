@@ -505,6 +505,7 @@ function App() {
         updateCheckListItem,
         deleteCheckListItem,
         updateComment,
+        move_task,
       }}
     >
       <section className="hero is-fullheight">

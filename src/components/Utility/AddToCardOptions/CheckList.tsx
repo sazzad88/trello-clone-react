@@ -29,12 +29,12 @@ function AddToCard({ task }: { task: taskModel }) {
   };
 
   return (
-    <div className="option-item">
+    <div className="option-item" style={{ width: "100%" }}>
       <button
         onClick={() => {
           setShow(true);
         }}
-        className="button is-info is-light is-outlined is-small"
+        className="button is-info is-light is-outlined is-small is-fullwidth"
       >
         <span className="icon">
           <i className="fas fa-clipboard-check"></i>

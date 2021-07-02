@@ -149,6 +149,17 @@ body {
   border: 1px solid lightgray;
 }
 
+.action-modal {
+  background-color: #fefefe;
+  position: absolute;
+  top: 35px;
+  right: 0px;
+  width: auto;
+  border-radius: 4px;
+  padding: 20px;
+  border: 1px solid lightgray;
+}
+
 .warning-modal {
   background-color: #fefefe;
   position: absolute;
