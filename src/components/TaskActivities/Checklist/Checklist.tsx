@@ -18,7 +18,7 @@ function List({ data }: { data: CheckList }) {
   const [formError, setFormError] = useState<string>("");
 
   const deleteItem = (checkboxItemIndex: number, checkListId: string) => {
-    console.log("delete ", checkboxItemIndex);
+    //console.log("delete ", checkboxItemIndex);
     AppContext.deleteCheckListItem(
       checkListId,
       checkboxItemIndex,

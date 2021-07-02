@@ -7,6 +7,7 @@ import TaskDescription from "./Utility/TaskDescription";
 import AddToCard from "./Utility/AddToCard";
 import CardActions from "./Utility/CardActions";
 import TaskActivies from "./TaskActivities/TaskActivities";
+import Comments from "./Comments/Comments";
 
 function AddTask({ task }: { task: taskModel }) {
   let history = useHistory();
@@ -24,6 +25,7 @@ function AddTask({ task }: { task: taskModel }) {
                     <TaskHeader task={task} />
                     <TaskDescription task={task} />
                     <TaskActivies task={task} />
+                    <Comments task={task} />
                   </div>
                 </div>
               </article>

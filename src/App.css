@@ -2,6 +2,10 @@
   font-family: "Nunito Sans", sans-serif;
 }
 
+body {
+  background-color: #2955a0;
+}
+
 .fa,
 .far,
 .fas {
@@ -78,6 +82,42 @@
   background: #f8f5f5;
 }
 
+.section-detail {
+  width: 95% !important;
+}
+
+.section-icon {
+  width: 5% !important;
+}
+
+.section-icon i {
+  margin-top: 5px;
+}
+
+.timeInfo {
+  font-size: 12px;
+  color: gray;
+  margin-left: 10px;
+}
+
+.comment-user {
+  margin-bottom: 4px;
+}
+
+.comment-content {
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.comment-options {
+  margin-top: 5px;
+}
+.comment-options a {
+  font-size: 11px;
+  color: gray;
+  text-decoration: underline;
+}
 .options-container {
   display: flex;
   align-items: center;

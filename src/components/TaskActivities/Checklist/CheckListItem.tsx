@@ -49,7 +49,6 @@ function List({
           <input
             checked={item.completed}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              // console.log(event.target.checked);
               updateCheckBoxItem("completed", event.target.checked, index, id);
             }}
             type="checkbox"

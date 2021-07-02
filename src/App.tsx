@@ -56,8 +56,6 @@ function App() {
     let selectedColumn =
       columnIndex !== -1 ? currentColumns[columnIndex] : null;
 
-    // console.log(selectedColumn);
-
     if (selectedColumn) {
       taskIndex = selectedColumn.tasks.findIndex(
         (item: taskModel, index: number) => item.slug === taskSlug
@@ -358,11 +356,64 @@ function App() {
     }
   };
 
+  const updateComment = (
+    id: string,
+    value: string,
+    columnId: string,
+    taskSlug: string
+  ) => {
+    let currentColumns = [...columns],
+      [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
+
+    currentColumns.forEach((item: BaseColumn, index: number) => {
+      if (item.id === columnId) {
+        columnIndex = index;
+      }
+    });
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    if (selectedColumn) {
+      let newTask =
+        taskIndex !== -1
+          ? (selectedColumn.tasks[taskIndex] as taskModel)
+          : null;
+
+      if (newTask) {
+        // new comment
+        if (id === "") {
+          newTask.comments.push({
+            id: uuid(),
+            content: value,
+            user: "Anonymous",
+            createdAt: "sometime is past",
+          });
+        } else {
+          newTask.comments = newTask.comments.map((item: Comment) => {
+            if (item.id === id) {
+              return {
+                ...item,
+                content: value,
+                createdAt: `${item.createdAt} (edited)`,
+              };
+            }
+            return item;
+          });
+        }
+
+        currentColumns[columnIndex].tasks[taskIndex] = newTask;
+
+        setColumns(currentColumns);
+      }
+    }
+  };
+
   return (
     <ColumnContext.Provider
       value={{
-        columns: columns,
-        move_column: move_column,
+        columns,
+        move_column,
         addTask,
         addColumn,
         saveFixedTaskItem,
@@ -370,6 +421,7 @@ function App() {
         addCheckListItem,
         updateCheckListItem,
         deleteCheckListItem,
+        updateComment,
       }}
     >
       <section className="hero is-fullheight">
