@@ -46,6 +46,10 @@ function App() {
   } = useParams();
 
   useEffect(() => {
+    persistData(columns);
+  }, [columns]);
+
+  useEffect(() => {
     if (params.columnId && params.taskSlug) {
       let selectedColumn = columns.find(
         (item: BaseColumn) => item.id === params.columnId
@@ -93,7 +97,6 @@ function App() {
     columnList.splice(toColumnIndex, 0, columnToMove);
 
     setColumns(columnList);
-    persistData(columnList);
   };
 
   const move_task = (
@@ -109,10 +112,29 @@ function App() {
       1
     );
 
+    let duplicateNameFound = columnList[toColumnIndex].tasks.findIndex(
+      (item: taskModel) => item.slug === taskToMove[0].slug
+    );
+
+    let new_slug = `${taskToMove[0].slug}`;
+    if (duplicateNameFound !== -1) {
+      //
+      new_slug = `${new_slug}-`;
+      while (
+        columnList[toColumnIndex].tasks.findIndex(
+          (item: taskModel) => item.slug === new_slug
+        ) !== -1
+      ) {
+        new_slug = `${new_slug}-`;
+      }
+
+      taskToMove[0].slug = new_slug;
+    }
+
+    //console.log({ duplicateNameFound, new_slug });
     columnList[toColumnIndex].tasks.splice(toTaskIndex, 0, taskToMove[0]);
 
     setColumns(columnList);
-    persistData(columnList);
   };
 
   const addTask = (ColumnIndex: number, title: string): Promise<boolean> => {
@@ -140,7 +162,7 @@ function App() {
         columnList[ColumnIndex].tasks = currentTasks;
 
         setColumns(columnList);
-        persistData(columnList);
+
         resolve(true);
       }
     });
@@ -157,7 +179,6 @@ function App() {
 
     columnList.push(newColumn);
     setColumns(columnList);
-    persistData(columnList);
   };
 
   const saveFixedTaskItem = (
@@ -192,7 +213,6 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
-        persistData(currentColumns);
 
         if (name === "name") {
           setTimeout(() => {
@@ -238,7 +258,6 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
-        persistData(currentColumns);
       }
     }
   };
@@ -282,7 +301,6 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
-        persistData(currentColumns);
       }
     }
   };
@@ -380,7 +398,6 @@ function App() {
           currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
           setColumns(currentColumns);
-          persistData(currentColumns);
         }
       }
     }
@@ -422,7 +439,6 @@ function App() {
           currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
           setColumns(currentColumns);
-          persistData(currentColumns);
         }
       }
     }
@@ -486,7 +502,6 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
-        persistData(currentColumns);
       }
     }
   };
