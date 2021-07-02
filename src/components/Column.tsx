@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { ColumnContext } from "../context/ColumnContext";
+import React from "react";
+
 import { Column, taskModel } from "../interfaces/model";
 import Task from "./Task";
 import AddTask from "./AddTask";
@@ -8,8 +8,6 @@ const MainColumn: React.FC<Column> = (props) => {
   let column = props.column,
     colIndex = props.colIndex;
 
-  const AppContext = useContext(ColumnContext);
-
   let moveTaskOrColumn = (
     e: React.DragEvent,
     toTasks: taskModel[],
@@ -17,7 +15,7 @@ const MainColumn: React.FC<Column> = (props) => {
     taskIndex: number
   ) => {
     const type = e.dataTransfer.getData("type");
-    //console.log("current task length : ", toTasks.length);
+
     if (type === "task")
       moveTask(e, taskIndex ? taskIndex : toTasks.length, toColumnIndex);
     else {

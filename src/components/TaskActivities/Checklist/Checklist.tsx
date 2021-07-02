@@ -27,14 +27,15 @@ function List({ data }: { data: CheckList }) {
     );
   };
 
-  const updateCompleted = (
-    value: boolean,
+  const updateCheckBoxItem = (
+    field: "completed" | "title",
+    value: boolean | string,
     checkboxItemIndex: number,
     checkListId: string
   ) => {
     //console.log(value, id, params.columnId, params.taskSlug);
     AppContext.updateCheckListItem(
-      "completed",
+      field,
       value,
       checkListId,
       checkboxItemIndex,
@@ -97,7 +98,7 @@ function List({ data }: { data: CheckList }) {
         <CheckListItem
           key={item.id}
           index={index}
-          updateCompleted={updateCompleted}
+          updateCheckBoxItem={updateCheckBoxItem}
           item={item}
           id={data.id}
           deleteItem={deleteItem}

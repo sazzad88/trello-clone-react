@@ -7,35 +7,111 @@ function List({
   item,
   index,
   id,
-  updateCompleted,
+  updateCheckBoxItem,
   deleteItem,
 }: {
   item: ChecklistItem;
   index: number;
   id: string;
-  updateCompleted: (
-    value: boolean,
+  updateCheckBoxItem: (
+    field: "completed" | "title",
+    value: boolean | string,
     checkboxItemIndex: number,
     checkListId: string
   ) => void;
   deleteItem: (checkboxItemIndex: number, checkListId: string) => void;
 }) {
   const [openWarning, setOpenWarning] = useState<boolean>(false);
+  const [openInput, setOpenInput] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(item.title);
+  const [formError, setFormError] = useState<{
+    error: boolean;
+    message: string;
+  }>({ error: false, message: "" });
+
+  const saveTitle = () => {
+    if (title.trim().length < 2) {
+      setFormError({
+        error: true,
+        message: "This can't be empty",
+      });
+      return;
+    }
+
+    updateCheckBoxItem("title", title, index, id);
+    setOpenInput(false);
+  };
+
   return (
     <div className="columns">
-      <div className="column is-four-fifth">
+      <div className="column is-one-fifth" style={{ width: "5%" }}>
         <label className="checkbox">
           <input
             checked={item.completed}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               // console.log(event.target.checked);
-              updateCompleted(event.target.checked, index, id);
+              updateCheckBoxItem("completed", event.target.checked, index, id);
             }}
             type="checkbox"
           />
-          &nbsp;&nbsp;&nbsp;
-          {item.title}
         </label>
+      </div>
+
+      <div className="column is-three-fifth">
+        {!openInput ? (
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setOpenInput(true);
+            }}
+          >
+            {item.title}
+          </span>
+        ) : (
+          <>
+            <div className="field">
+              <div className="control ">
+                <input
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setTitle(event.target.value);
+                    setFormError({
+                      error: false,
+                      message: "",
+                    });
+                  }}
+                  value={title}
+                  className={`input ${formError.error ? "is-danger" : ""}`}
+                  type="text"
+                />
+              </div>
+              {formError.message ? (
+                <p className="help is-danger">{formError.message}</p>
+              ) : null}
+            </div>
+            <div className="field is-grouped">
+              <div className="control">
+                <button className="button is-link is-small" onClick={saveTitle}>
+                  Add
+                </button>
+              </div>
+              <div className="control">
+                <button
+                  onClick={() => {
+                    setOpenInput(false);
+                    setTitle(item.title);
+                    setFormError({
+                      error: false,
+                      message: "",
+                    });
+                  }}
+                  className="button is-link is-light is-small"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="column is-one-fifth" style={{ textAlign: "right" }}>

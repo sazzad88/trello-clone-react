@@ -76,7 +76,7 @@ function AddTask({
                   setOpenInput(false);
                   setTitle("");
                   setFormError({
-                    error: true,
+                    error: false,
                     message: "",
                   });
                 }}
