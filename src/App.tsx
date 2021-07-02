@@ -15,9 +15,29 @@ import {
   Comment,
 } from "./interfaces/model";
 
+const persistData = (data: BaseColumn[]) => {
+  localStorage.setItem("trello_clone_storage", JSON.stringify(data));
+};
+
+const fetchData = (): BaseColumn[] => {
+  try {
+    if (localStorage.getItem("trello_clone_storage")) {
+      let data = JSON.parse(
+        localStorage.getItem("trello_clone_storage")!
+      ) as BaseColumn[];
+
+      return data;
+    }
+  } catch (e) {
+    // console.log("Not valid here : ", e);
+  }
+
+  return DefaultBoard.columns;
+};
+
 function App() {
   let history = useHistory();
-  const [columns, setColumns] = useState<BaseColumn[]>(DefaultBoard.columns);
+  const [columns, setColumns] = useState<BaseColumn[]>(fetchData());
   const [openTaskModal, setOpenTaskModal] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<taskModel | {}>({});
   let params: {
@@ -37,6 +57,7 @@ function App() {
         );
 
         if (taskItem) {
+          // console.log("open modal ", taskItem);
           setSelectedTask(taskItem);
           setOpenTaskModal(true);
         }
@@ -72,6 +93,7 @@ function App() {
     columnList.splice(toColumnIndex, 0, columnToMove);
 
     setColumns(columnList);
+    persistData(columnList);
   };
 
   const move_task = (
@@ -90,6 +112,7 @@ function App() {
     columnList[toColumnIndex].tasks.splice(toTaskIndex, 0, taskToMove[0]);
 
     setColumns(columnList);
+    persistData(columnList);
   };
 
   const addTask = (ColumnIndex: number, title: string): Promise<boolean> => {
@@ -117,7 +140,7 @@ function App() {
         columnList[ColumnIndex].tasks = currentTasks;
 
         setColumns(columnList);
-
+        persistData(columnList);
         resolve(true);
       }
     });
@@ -134,6 +157,7 @@ function App() {
 
     columnList.push(newColumn);
     setColumns(columnList);
+    persistData(columnList);
   };
 
   const saveFixedTaskItem = (
@@ -168,6 +192,7 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
+        persistData(currentColumns);
 
         if (name === "name") {
           setTimeout(() => {
@@ -213,6 +238,7 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
+        persistData(currentColumns);
       }
     }
   };
@@ -256,6 +282,7 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
+        persistData(currentColumns);
       }
     }
   };
@@ -299,6 +326,7 @@ function App() {
           currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
           setColumns(currentColumns);
+          persistData(currentColumns);
         }
       }
     }
@@ -352,6 +380,7 @@ function App() {
           currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
           setColumns(currentColumns);
+          persistData(currentColumns);
         }
       }
     }
@@ -393,6 +422,7 @@ function App() {
           currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
           setColumns(currentColumns);
+          persistData(currentColumns);
         }
       }
     }
@@ -456,6 +486,7 @@ function App() {
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
         setColumns(currentColumns);
+        persistData(currentColumns);
       }
     }
   };
