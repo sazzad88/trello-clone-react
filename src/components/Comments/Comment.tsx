@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { ColumnContext } from "../../context/ColumnContext";
 
 import { Comment } from "../../interfaces/model";
@@ -12,6 +12,9 @@ const Comments = ({ data }: { data: Comment }) => {
     taskSlug: string;
   } = useParams();
 
+  const inputEl = useRef(null);
+
+  const [openWarning, setOpenWarning] = useState<boolean>(false);
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [comment, setComment] = useState<string>(data.content);
   const [formError, setFormError] = useState<boolean>(false);
@@ -50,6 +53,7 @@ const Comments = ({ data }: { data: Comment }) => {
             <div className="field">
               <div className="control ">
                 <input
+                  ref={inputEl}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setComment(event.target.value);
                     setFormError(false);
@@ -86,8 +90,18 @@ const Comments = ({ data }: { data: Comment }) => {
         ) : (
           <div className="field">
             {data.id === "" ? (
-              <div onClick={() => setOpenInput(true)} className="control">
+              <div
+                onClick={() => {
+                  setOpenInput(true);
+                  setTimeout(() => {
+                    let element = inputEl.current! as HTMLInputElement;
+                    element.focus();
+                  }, 500);
+                }}
+                className="control"
+              >
                 <input
+                  style={{ cursor: "pointer" }}
                   className="input"
                   type="text"
                   placeholder="Write c comment"
@@ -107,10 +121,62 @@ const Comments = ({ data }: { data: Comment }) => {
                     Edit
                   </a>
                   &nbsp;&nbsp;&nbsp;
-                  <a href="#">Delete</a>
+                  <a
+                    href="#"
+                    onClick={(event: React.MouseEvent<HTMLElement>) => {
+                      event.preventDefault();
+                      setOpenWarning(true);
+                    }}
+                  >
+                    Delete
+                  </a>
                 </p>
               </div>
             )}
+
+            {openWarning ? (
+              <div style={{ position: "relative" }}>
+                <div
+                  className="warning-modal"
+                  style={{ top: "0px", left: "0", zIndex: 100 }}
+                >
+                  <p>
+                    Do you want to delete this comment?
+                    <br /> This action is irreversible
+                  </p>
+                  <div className="field is-grouped" style={{ padding: "5px" }}>
+                    <div className="control">
+                      <button
+                        className="button is-danger is-small"
+                        onClick={() => {
+                          setOpenWarning(false);
+
+                          AppContext.updateComment(
+                            data.id,
+                            comment.trim(),
+                            params.columnId,
+                            params.taskSlug,
+                            true
+                          );
+                        }}
+                      >
+                        Yes
+                      </button>
+                    </div>
+                    <div className="control">
+                      <button
+                        onClick={() => {
+                          setOpenWarning(false);
+                        }}
+                        className="button is-link is-light is-small"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         )}
       </div>

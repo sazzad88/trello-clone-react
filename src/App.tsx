@@ -106,8 +106,6 @@ function App() {
       if (notUnique) {
         reject(false);
       } else {
-        let activity: CheckList[] = [];
-
         currentTasks.push({
           slug: slugify(title),
           name: title,
@@ -262,6 +260,50 @@ function App() {
     }
   };
 
+  const updateCheckList = (
+    value: string,
+    checkListId: string,
+    columnId: string,
+    taskSlug: string,
+    remove?: boolean
+  ) => {
+    let currentColumns = [...columns],
+      [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
+
+    currentColumns.forEach((item: BaseColumn, index: number) => {
+      if (item.id === columnId) {
+        columnIndex = index;
+      }
+    });
+
+    let selectedColumn =
+      columnIndex !== -1 ? currentColumns[columnIndex] : null;
+
+    if (selectedColumn) {
+      let newTask =
+        taskIndex !== -1
+          ? (selectedColumn.tasks[taskIndex] as taskModel)
+          : null;
+
+      if (newTask) {
+        let activityIndex = newTask.activity.findIndex(
+          (item: CheckList) =>
+            item.activityType === "Checklist" && item.id === checkListId
+        );
+
+        if (activityIndex !== -1) {
+          if (remove) {
+            newTask.activity.splice(activityIndex, 1);
+          } else newTask.activity[activityIndex].title = value;
+
+          currentColumns[columnIndex].tasks[taskIndex] = newTask;
+
+          setColumns(currentColumns);
+        }
+      }
+    }
+  };
+
   const updateCheckListItem = (
     field: "title" | "completed",
     value: boolean | string,
@@ -295,9 +337,9 @@ function App() {
         );
 
         if (activityIndex !== -1) {
-          console.log(
-            newTask.activity[activityIndex].content[checkboxItemIndex][field]
-          );
+          // console.log(
+          //   newTask.activity[activityIndex].content[checkboxItemIndex][field]
+          // );
 
           if (field === "completed")
             newTask.activity[activityIndex].content[
@@ -360,7 +402,8 @@ function App() {
     id: string,
     value: string,
     columnId: string,
-    taskSlug: string
+    taskSlug: string,
+    remove?: boolean
   ) => {
     let currentColumns = [...columns],
       [columnIndex, taskIndex] = extractColumnAndTaskIndex(columnId, taskSlug);
@@ -381,25 +424,33 @@ function App() {
           : null;
 
       if (newTask) {
-        // new comment
-        if (id === "") {
-          newTask.comments.push({
-            id: uuid(),
-            content: value,
-            user: "Anonymous",
-            createdAt: "sometime is past",
-          });
+        if (remove) {
+          newTask.comments = newTask.comments.filter(
+            (item: Comment) => item.id !== id
+          );
         } else {
-          newTask.comments = newTask.comments.map((item: Comment) => {
-            if (item.id === id) {
-              return {
-                ...item,
-                content: value,
-                createdAt: `${item.createdAt} (edited)`,
-              };
-            }
-            return item;
-          });
+          // new comment
+          if (id === "") {
+            newTask.comments.push({
+              id: uuid(),
+              content: value,
+              user: "Anonymous",
+              createdAt: new Date().toString(),
+            });
+          } else {
+            newTask.comments = newTask.comments.map((item: Comment) => {
+              if (item.id === id) {
+                return {
+                  ...item,
+                  content: value,
+                  createdAt: item.createdAt.includes("(edited)")
+                    ? item.createdAt
+                    : `${item.createdAt} (edited)`,
+                };
+              }
+              return item;
+            });
+          }
         }
 
         currentColumns[columnIndex].tasks[taskIndex] = newTask;
@@ -418,6 +469,7 @@ function App() {
         addColumn,
         saveFixedTaskItem,
         AddNewCheckList,
+        updateCheckList,
         addCheckListItem,
         updateCheckListItem,
         deleteCheckListItem,

@@ -90,7 +90,7 @@ function List({
             <div className="field is-grouped">
               <div className="control">
                 <button className="button is-link is-small" onClick={saveTitle}>
-                  Add
+                  Save
                 </button>
               </div>
               <div className="control">

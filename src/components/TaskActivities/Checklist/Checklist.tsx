@@ -11,20 +11,45 @@ function List({ data }: { data: CheckList }) {
     taskSlug: string;
   } = useParams();
 
+  const [openWarning, setOpenWarning] = useState<boolean>(false);
   const AppContext = useContext(ColumnContext);
   const [title, setTitle] = useState<string>("");
+  const [currentTitle, setCurrentTitle] = useState<string>(data.title);
+  const [openCurrent, setOpenCurrent] = useState<boolean>(false);
   const [openNew, setOpenNew] = useState<boolean>(false);
 
   const [formError, setFormError] = useState<string>("");
+  const [TitleformError, setTitleFormError] = useState<string>("");
 
   const deleteItem = (checkboxItemIndex: number, checkListId: string) => {
-    //console.log("delete ", checkboxItemIndex);
     AppContext.deleteCheckListItem(
       checkListId,
       checkboxItemIndex,
       params.columnId,
       params.taskSlug
     );
+  };
+
+  const updateCheckList = (
+    value: boolean | string,
+    checkListId: string,
+    remove?: boolean
+  ) => {
+    if (typeof value === "string")
+      if (value.trim().length < 1 && !remove) {
+        setTitleFormError("Title can't be empty");
+        return;
+      }
+
+    AppContext.updateCheckList(
+      value,
+      checkListId,
+      params.columnId,
+      params.taskSlug,
+      remove
+    );
+
+    setOpenCurrent(false);
   };
 
   const updateCheckBoxItem = (
@@ -68,8 +93,119 @@ function List({ data }: { data: CheckList }) {
 
   return (
     <>
-      <div className="field">
-        <label className="label">{data.title}</label>
+      <div
+        className="columns"
+        style={{ marginTop: "5px", marginBottom: "5px" }}
+      >
+        <div className="column is-one-fifth" style={{ width: "5%" }}>
+          <i className="far fa-check-square"></i>
+        </div>
+        <div className="column is-three-fifth">
+          {!openCurrent ? (
+            <div
+              className="field"
+              onClick={() => {
+                setOpenCurrent(true);
+              }}
+            >
+              <label style={{ cursor: "pointer" }} className="label">
+                {data.title}
+              </label>
+            </div>
+          ) : (
+            <>
+              <div className="field">
+                <div className="control ">
+                  <input
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setCurrentTitle(event.target.value);
+                      setTitleFormError("");
+                    }}
+                    value={currentTitle}
+                    className={`input ${
+                      TitleformError !== "" ? "is-danger" : ""
+                    }`}
+                    type="text"
+                    placeholder="Checklist title"
+                  />
+                </div>
+                {TitleformError !== "" ? (
+                  <p className="help is-danger">{TitleformError}</p>
+                ) : null}
+              </div>
+
+              <div className="field is-grouped">
+                <div className="control">
+                  <button
+                    className="button is-link is-small"
+                    onClick={() => {
+                      updateCheckList(currentTitle, data.id);
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+                <div className="control">
+                  <button
+                    onClick={() => {
+                      setOpenCurrent(false);
+                      setCurrentTitle(data.title);
+                      setTitleFormError("");
+                    }}
+                    className="button is-link is-light is-small"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="column is-one-fifth">
+          <div className="control" style={{ textAlign: "right" }}>
+            <button
+              onClick={() => {
+                setOpenWarning(true);
+              }}
+              className="button is-danger is-small"
+            >
+              <i style={{ color: "#fff" }} className="far fa-trash-alt"></i>
+            </button>
+            {openWarning ? (
+              <div style={{ position: "relative" }}>
+                <div className="warning-modal">
+                  <p>
+                    Do you want to delete this item?
+                    <br /> This action is irreversible
+                  </p>
+                  <div className="field is-grouped" style={{ padding: "5px" }}>
+                    <div className="control">
+                      <button
+                        className="button is-danger is-small"
+                        onClick={() => {
+                          setOpenWarning(false);
+                          updateCheckList("", data.id, true);
+                        }}
+                      >
+                        Yes
+                      </button>
+                    </div>
+                    <div className="control">
+                      <button
+                        onClick={() => {
+                          setOpenWarning(false);
+                        }}
+                        className="button is-link is-light is-small"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
       </div>
 
       {data.content.length > 0 ? (
