@@ -150,6 +150,7 @@ body {
   border-radius: 4px;
   padding: 5px;
   border: 1px solid lightgray;
+  z-index: 10;
 }
 
 .action-modal {
@@ -161,6 +162,7 @@ body {
   border-radius: 4px;
   padding: 20px;
   border: 1px solid lightgray;
+  z-index: 10;
 }
 
 .warning-modal {
@@ -198,6 +200,20 @@ textarea:read-only {
 
 .modal-content .box {
   background: #f0f3fa !important;
+}
+
+.card-footer-item {
+  align-items: center;
+  display: flex;
+  flex-basis: 0;
+  flex-grow: 0 !important;
+  flex-shrink: 0;
+  justify-content: left !important;
+  padding: 0.75rem;
+}
+
+.card-footer-item:not(:last-child) {
+  border-right: 1px solid #ffffff !important;
 }
 
 @media screen and (min-width: 769px) {

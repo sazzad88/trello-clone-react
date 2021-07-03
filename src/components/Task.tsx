@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import { taskModel, BaseColumn } from "../interfaces/model";
 import { useHistory } from "react-router-dom";
 import { ColumnContext } from "../context/ColumnContext";
+import { CheckList, ChecklistItem } from "../interfaces/model";
 
 interface taskProps {
   task: taskModel;
@@ -24,6 +25,10 @@ const Task: React.FC<taskProps> = (props) => {
   let task = props.task;
   let history = useHistory();
   let [openWarning, setOpenWarning] = useState<boolean>(false);
+  let [summary, setSummary] = useState<{ checked: number; total: number }>({
+    checked: 0,
+    total: 0,
+  });
 
   const removeTask = (taskSlug: string) => {
     console.log(props.column.id, taskSlug);
@@ -33,6 +38,25 @@ const Task: React.FC<taskProps> = (props) => {
   const redirect = (taskSlug: string) => {
     history.push(`/${props.column.id}/${taskSlug}`);
   };
+
+  const getCheckBoxRecord = () => {
+    let result = { checked: 0, total: 0 };
+
+    task.activity.forEach((item: CheckList) => {
+      if (item.activityType === "Checklist") {
+        item.content.forEach((check: ChecklistItem) => {
+          if (check.completed) result.checked++;
+          result.total++;
+        });
+      }
+    });
+
+    return result;
+  };
+
+  useEffect(() => {
+    setSummary(getCheckBoxRecord());
+  }, [task.comments, task.activity]);
 
   return (
     <div
@@ -56,7 +80,7 @@ const Task: React.FC<taskProps> = (props) => {
       className="card row-item"
     >
       <header className="card-header">
-        <p className="card-header-title" style={{ position: "relative" }}>
+        <div className="card-header-title" style={{ position: "relative" }}>
           {task.name}
           <div
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
@@ -67,7 +91,7 @@ const Task: React.FC<taskProps> = (props) => {
           >
             <i className="far fa-trash-alt"></i>
           </div>
-        </p>
+        </div>
         {openWarning ? (
           <div style={{ position: "relative" }}>
             <div className="warning-modal">
@@ -105,9 +129,32 @@ const Task: React.FC<taskProps> = (props) => {
           </div>
         ) : null}
       </header>
-      <div className="card-content" v-if="task.description !== ''">
-        <div className="content small-text">{task.description}</div>
-      </div>
+      {task.description.trim() !== "" ? (
+        <div className="card-content">
+          <div className="content small-text">{task.description}</div>
+        </div>
+      ) : null}
+
+      {task.comments.length > 0 || task.activity.length > 0 ? (
+        <footer className="card-footer">
+          {task.comments.length > 0 ? (
+            <div className="card-footer-item">
+              <i className="far fa-comments"></i>
+              &nbsp;
+              <span style={{ marginTop: "5px" }}>{task.comments.length}</span>
+            </div>
+          ) : null}
+          {summary.total > 0 ? (
+            <div className="card-footer-item">
+              <i className="fas fa-clipboard-check"></i>
+              &nbsp;
+              <span style={{ marginTop: "5px" }}>
+                {summary.checked} / {summary.total}
+              </span>
+            </div>
+          ) : null}
+        </footer>
+      ) : null}
     </div>
   );
 };

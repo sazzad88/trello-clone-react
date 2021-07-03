@@ -29,7 +29,7 @@ const fetchData = (): BaseColumn[] => {
       return data;
     }
   } catch (e) {
-    // console.log("Not valid here : ", e);
+    console.log("Not valid here : ", e);
   }
 
   return DefaultBoard.columns;
@@ -46,6 +46,12 @@ function App() {
   } = useParams();
 
   useEffect(() => {
+    //console.log("loaded only time ", params);
+    setColumns(fetchData());
+  }, [params]);
+
+  useEffect(() => {
+    //console.log("persist");
     persistData(columns);
   }, [columns]);
 
@@ -67,7 +73,7 @@ function App() {
         }
       }
     }
-  });
+  }, [columns, params, params.columnId, params.taskSlug]);
 
   const extractColumnAndTaskIndex = (columnId: string, taskSlug: string) => {
     let currentColumns = [...columns],
@@ -142,7 +148,6 @@ function App() {
       taskToMove[0].slug = new_slug;
     }
 
-    //console.log({ duplicateNameFound, new_slug });
     columnList[toColumnIndex].tasks.splice(toTaskIndex, 0, taskToMove[0]);
 
     setColumns(columnList);
@@ -202,6 +207,7 @@ function App() {
     };
 
     columnList.push(newColumn);
+
     setColumns(columnList);
   };
 
@@ -368,7 +374,6 @@ function App() {
           currentColumns[columnIndex].tasks[taskIndex] = newTask;
 
           setColumns(currentColumns);
-          persistData(currentColumns);
         }
       }
     }
@@ -549,6 +554,7 @@ function App() {
         <div className="hero-body">
           {columns.map((col, index) => (
             <Column
+              key={col.id}
               column={col}
               move_column={move_column}
               move_task={move_task}
