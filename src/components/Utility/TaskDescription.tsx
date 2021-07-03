@@ -29,49 +29,56 @@ function TaskHeader({ task }: { task: taskModel }) {
   };
 
   return (
-    <div className="field">
-      <label className="label">Description</label>
-      {!edit ? (
-        <textarea
-          onClick={() => setEdit(true)}
-          readOnly
-          className="textarea"
-          value={description}
-          placeholder="Add a more detailed description"
-        />
-      ) : (
-        <div className="add-column-container">
-          <textarea
-            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setDescription(event.target.value);
-            }}
-            className="textarea"
-            value={description}
-            placeholder="Add a more detailed description"
-          />
-          <div className="field is-grouped" style={{ padding: "5px" }}>
-            <div className="control">
-              <button
-                className="button is-link is-small"
-                onClick={saveDescription}
-              >
-                Save
-              </button>
-            </div>
-            <div className="control">
-              <button
-                onClick={() => {
-                  setEdit(false);
-                  setDescription(task.description);
+    <div className="columns" style={{ marginBottom: "10px" }}>
+      <div className="column section-icon">
+        <i className="far fa-file-alt"></i>
+      </div>
+      <div className="column is-four-fifths section-detail">
+        <div className="field">
+          <label className="label">Description</label>
+          {!edit ? (
+            <textarea
+              onClick={() => setEdit(true)}
+              readOnly
+              className="textarea"
+              value={description}
+              placeholder="Add a more detailed description"
+            />
+          ) : (
+            <div className="add-column-container">
+              <textarea
+                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                  setDescription(event.target.value);
                 }}
-                className="button is-link is-light is-small"
-              >
-                Cancel
-              </button>
+                className="textarea"
+                value={description}
+                placeholder="Add a more detailed description"
+              />
+              <div className="field is-grouped" style={{ padding: "5px" }}>
+                <div className="control">
+                  <button
+                    className="button is-link is-small"
+                    onClick={saveDescription}
+                  >
+                    Save
+                  </button>
+                </div>
+                <div className="control">
+                  <button
+                    onClick={() => {
+                      setEdit(false);
+                      setDescription(task.description);
+                    }}
+                    className="button is-link is-light is-small"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

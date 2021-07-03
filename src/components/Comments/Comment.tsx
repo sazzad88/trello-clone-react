@@ -104,7 +104,7 @@ const Comments = ({ data }: { data: Comment }) => {
                   style={{ cursor: "pointer" }}
                   className="input"
                   type="text"
-                  placeholder="Write c comment"
+                  placeholder="Write a comment"
                 />
               </div>
             ) : (

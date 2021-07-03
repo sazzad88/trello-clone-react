@@ -86,6 +86,7 @@ body {
 
 .section-detail {
   width: 95% !important;
+  margin-top: 3px;
 }
 
 .section-icon {

@@ -13,6 +13,14 @@ const emptyComment: Comment = {
 const Comments = ({ task }: { task: taskModel }) => {
   return (
     <>
+      <div className="columns" style={{ marginBottom: "10px" }}>
+        <div className="column section-icon">
+          <i className="fas fa-hourglass-start"></i>
+        </div>
+        <div className="column is-four-fifths section-detail">
+          <label className="label">Activity</label>
+        </div>
+      </div>
       {task.comments.map((item: Comment) => (
         <SingleComment key={item.id} data={item} />
       ))}

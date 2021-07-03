@@ -40,6 +40,7 @@ function TaskHeader({ task }: { task: taskModel }) {
       {!edit ? (
         <h5
           className="title is-5"
+          style={{ cursor: "pointer" }}
           onClick={() => {
             setEdit(true);
           }}

@@ -252,7 +252,7 @@ function List({ data }: { data: CheckList }) {
               value={title}
               className={`input ${formError !== "" ? "is-danger" : ""}`}
               type="text"
-              placeholder="Task title"
+              placeholder="Title"
             />
           </div>
           {formError !== "" ? (
@@ -283,7 +283,7 @@ function List({ data }: { data: CheckList }) {
             </div>
           </>
         ) : (
-          <div className="control">
+          <div className="control" style={{ marginLeft: "20px" }}>
             <button
               className="button is-light is-small"
               onClick={() => {
