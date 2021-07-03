@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ColumnContext } from "../../../context/ColumnContext";
 
 import { ChecklistItem } from "../../../interfaces/model";
 

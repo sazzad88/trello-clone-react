@@ -8,13 +8,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { ColumnContext } from "./context/ColumnContext";
 import TaskModal from "./components/TaskModal";
 import AddColumn from "./components/AddColumn";
-import {
-  BaseColumn,
-  taskModel,
-  CheckList,
-  ChecklistItem,
-  Comment,
-} from "./interfaces/model";
+import { BaseColumn, taskModel, CheckList, Comment } from "./interfaces/model";
 
 const persistData = (data: BaseColumn[]) => {
   localStorage.setItem("trello_clone_storage", JSON.stringify(data));
@@ -52,7 +46,6 @@ function App() {
   }, [params]);
 
   useEffect(() => {
-    //console.log("persist");
     persistData(columns);
   }, [columns]);
 
@@ -155,7 +148,9 @@ function App() {
     setColumns(columnList);
 
     if (redirect) {
-      history.push(`/${columnList[toColumnIndex].id}/${new_slug}`);
+      setTimeout(() => {
+        history.push(`/${columnList[toColumnIndex].id}/${new_slug}`);
+      }, 600);
     }
   };
 

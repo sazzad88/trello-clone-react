@@ -1,5 +1,5 @@
-import { uuid } from "./utils";
-
-export default {
+const base = {
   columns: [],
 };
+
+export default base;

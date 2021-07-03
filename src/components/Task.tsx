@@ -81,7 +81,10 @@ const Task: React.FC<taskProps> = (props) => {
     >
       <header className="card-header">
         <div className="card-header-title" style={{ position: "relative" }}>
-          {task.name}
+          {task.name.length > 35
+            ? task.name.substring(0, 35) + "..."
+            : task.name}
+
           <div
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
               event.stopPropagation();

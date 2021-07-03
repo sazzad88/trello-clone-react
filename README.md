@@ -24,11 +24,25 @@ Current implemented features
 
 
 
-![Products Table Rows Selected](public/images/products-table-rows-selected.png)
+![Initial state](public/snapshots/1.png)
 
 
 
-![Products Table Rows Diff](public/images/products-table-rows-diff.png)
+![Add a card](public/snapshots/2.png)
+
+
+![Card Modal](public/snapshots/3.png)
+
+
+![Add checklist](public/snapshots/4.png)
+
+
+![Add checklist item](public/snapshots/5.png)
+
+![Add comment](public/snapshots/6.png)
+
+
+![MOve card](public/snapshots/7.png)
 
 
 

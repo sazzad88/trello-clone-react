@@ -3,14 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "bulma/css/bulma.min.css";
 import reportWebVitals from "./reportWebVitals";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Link,
-  useParams,
-  useRouteMatch,
-} from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>

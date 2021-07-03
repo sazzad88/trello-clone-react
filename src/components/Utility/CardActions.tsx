@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
-import { ColumnContext } from "../../context/ColumnContext";
+import React from "react";
+//import { ColumnContext } from "../../context/ColumnContext";
 
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { taskModel } from "../../interfaces/model";
 import MoveCard from "./CardActions/MoveCard";
 

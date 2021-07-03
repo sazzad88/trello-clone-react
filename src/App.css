@@ -27,11 +27,13 @@ body {
 }
 
 .hero.is-fullheight .hero-body {
+  display: flex;
   align-items: flex-start !important;
+  flex-grow: 1 !important;
 }
 
 .trello-column {
-  width: 300px;
+  min-width: 300px;
   margin: 0 4px;
   height: auto;
   max-height: 90vh;
@@ -66,7 +68,7 @@ body {
 }
 
 .row-item {
-  margin: 5px 0px;
+  margin: 25px 0px;
   cursor: pointer;
 }
 
@@ -200,6 +202,7 @@ textarea:read-only {
 }
 
 .add-column-container {
+  min-width: 300px;
   padding: 3px;
   background-color: #ebecf0;
   border-radius: 2px;
@@ -207,6 +210,10 @@ textarea:read-only {
 
 .modal-content .box {
   background: #f0f3fa !important;
+}
+
+.card-header-title {
+  font-size: 14px;
 }
 
 .card-footer-item {
