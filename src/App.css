@@ -68,6 +68,7 @@ body {
 }
 
 .bin {
+  display: inline-block;
   cursor: pointer;
   position: absolute;
   top: 15px;
@@ -175,6 +176,12 @@ body {
   text-align: left;
   width: 100%;
   font-size: 14px;
+}
+
+.task-bin {
+  position: absolute;
+  top: 4px;
+  right: 3px;
 }
 
 textarea:read-only {

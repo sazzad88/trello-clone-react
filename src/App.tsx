@@ -168,6 +168,19 @@ function App() {
     });
   };
 
+  const removeTask = (columnId: string, taskSlug: string): void => {
+    let columnList: BaseColumn[] = [...columns];
+    let targetColumnIndex: number = columnList.findIndex(
+      (item: BaseColumn) => item.id === columnId
+    );
+
+    columnList[targetColumnIndex].tasks = columnList[
+      targetColumnIndex
+    ].tasks.filter((item: taskModel) => item.slug !== taskSlug);
+
+    setColumns(columnList);
+  };
+
   const addColumn = (title: string) => {
     let columnList = [...columns];
 
@@ -383,10 +396,6 @@ function App() {
         );
 
         if (activityIndex !== -1) {
-          // console.log(
-          //   newTask.activity[activityIndex].content[checkboxItemIndex][field]
-          // );
-
           if (field === "completed")
             newTask.activity[activityIndex].content[
               checkboxItemIndex
@@ -512,6 +521,7 @@ function App() {
         columns,
         move_column,
         addTask,
+        removeTask,
         addColumn,
         saveFixedTaskItem,
         AddNewCheckList,

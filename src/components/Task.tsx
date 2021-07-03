@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 
 import { taskModel, BaseColumn } from "../interfaces/model";
 import { useHistory } from "react-router-dom";
+import { ColumnContext } from "../context/ColumnContext";
 
 interface taskProps {
   task: taskModel;
@@ -19,8 +20,15 @@ interface taskProps {
 }
 
 const Task: React.FC<taskProps> = (props) => {
+  const AppContext = useContext(ColumnContext);
   let task = props.task;
   let history = useHistory();
+  let [openWarning, setOpenWarning] = useState<boolean>(false);
+
+  const removeTask = (taskSlug: string) => {
+    console.log(props.column.id, taskSlug);
+    AppContext.removeTask(props.column.id, taskSlug);
+  };
 
   const redirect = (taskSlug: string) => {
     history.push(`/${props.column.id}/${taskSlug}`);
@@ -48,12 +56,54 @@ const Task: React.FC<taskProps> = (props) => {
       className="card row-item"
     >
       <header className="card-header">
-        <p className="card-header-title">
+        <p className="card-header-title" style={{ position: "relative" }}>
           {task.name}
-          <span className="bin icon is-small">
+          <div
+            onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+              event.stopPropagation();
+              setOpenWarning(true);
+            }}
+            className="bin icon is-small task-bin"
+          >
             <i className="far fa-trash-alt"></i>
-          </span>
+          </div>
         </p>
+        {openWarning ? (
+          <div style={{ position: "relative" }}>
+            <div className="warning-modal">
+              <p>
+                Do you want to delete this card?
+                <br /> This action is irreversible
+              </p>
+              <div className="field is-grouped" style={{ padding: "5px" }}>
+                <div className="control">
+                  <button
+                    className="button is-danger is-small"
+                    onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                      setOpenWarning(false);
+                      removeTask(task.slug);
+
+                      event.stopPropagation();
+                    }}
+                  >
+                    Yes
+                  </button>
+                </div>
+                <div className="control">
+                  <button
+                    onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                      event.stopPropagation();
+                      setOpenWarning(false);
+                    }}
+                    className="button is-link is-light is-small"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </header>
       <div className="card-content" v-if="task.description !== ''">
         <div className="content small-text">{task.description}</div>
