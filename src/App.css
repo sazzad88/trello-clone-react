@@ -39,7 +39,7 @@ body {
   vertical-align: top;
   white-space: nowrap;
   background: lightblue;
-  border-radius: 8px;
+  border-radius: 3px;
   overflow-y: auto;
 }
 
@@ -51,7 +51,8 @@ body {
 }
 
 .board-title {
-  padding: 5px;
+  padding: 8px;
+  cursor: pointer;
 }
 
 .task-container {

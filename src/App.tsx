@@ -90,6 +90,17 @@ function App() {
     return [columnIndex, taskIndex];
   };
 
+  const updateTitle = (title: string, columnId: string) => {
+    let columnList = [...columns];
+
+    let columnIndex = columnList.findIndex(
+      (item: BaseColumn) => item.id === columnId
+    );
+    columnList[columnIndex].name = title;
+
+    setColumns(columnList);
+  };
+
   const move_column = (fromColumnIndex: number, toColumnIndex: number) => {
     let columnList = [...columns];
 
@@ -518,6 +529,7 @@ function App() {
   return (
     <ColumnContext.Provider
       value={{
+        updateTitle,
         columns,
         move_column,
         addTask,

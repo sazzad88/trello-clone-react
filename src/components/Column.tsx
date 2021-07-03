@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useState, useContext } from "react";
+import { ColumnContext } from "../context/ColumnContext";
 import { Column, taskModel } from "../interfaces/model";
 import Task from "./Task";
 import AddTask from "./AddTask";
@@ -7,6 +7,29 @@ import AddTask from "./AddTask";
 const MainColumn: React.FC<Column> = (props) => {
   let column = props.column,
     colIndex = props.colIndex;
+
+  const AppContext = useContext(ColumnContext);
+
+  const [openInput, setOpenInput] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(props.column.name);
+  const [formError, setFormError] = useState<{
+    error: boolean;
+    message: string;
+  }>({ error: false, message: "" });
+
+  const saveTitle = () => {
+    if (title.trim().length < 2) {
+      setFormError({
+        error: true,
+        message: "Title can't be empty",
+      });
+      return;
+    }
+
+    AppContext.updateTitle(title, props.column.id);
+    setOpenInput(false);
+    setTitle(title);
+  };
 
   let moveTaskOrColumn = (
     e: React.DragEvent,
@@ -109,7 +132,61 @@ const MainColumn: React.FC<Column> = (props) => {
           moveTaskOrColumn(e, column.tasks, Number(colIndex), 0)
         }
       >
-        <div className="title is-5 board-title">{column.name}</div>
+        {openInput ? (
+          <>
+            <div className="field">
+              <div className="control ">
+                <input
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setTitle(event.target.value);
+                    setFormError({
+                      error: false,
+                      message: "",
+                    });
+                  }}
+                  value={title}
+                  className={`input ${formError.error ? "is-danger" : ""}`}
+                  type="text"
+                  placeholder="Task title"
+                />
+              </div>
+              {formError.message ? (
+                <p className="help is-danger">{formError.message}</p>
+              ) : null}
+            </div>
+            <div className="field is-grouped">
+              <div className="control">
+                <button className="button is-link is-small" onClick={saveTitle}>
+                  Save
+                </button>
+              </div>
+              <div className="control">
+                <button
+                  onClick={() => {
+                    setOpenInput(false);
+                    setTitle(props.column.name);
+                    setFormError({
+                      error: false,
+                      message: "",
+                    });
+                  }}
+                  className="button is-link is-light is-small"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div
+            className="title is-5 board-title"
+            onClick={() => {
+              setOpenInput(true);
+            }}
+          >
+            {column.name}
+          </div>
+        )}
 
         <div className="task-container">
           {column.tasks.map((task, taskIndex) => (
