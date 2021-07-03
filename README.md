@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+# Simple trello clone using react
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+It's a very basic clone of trello. Here i tried to implement only the features which can be implemented without the need of any server or third party service. No third 
 
-In the project directory, you can run:
+Current implemented features 
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- user can add new column.
+- column name can be updated.
+- column position can be changed by drag and drop. (browser drag and drop api is used)
+- user can add as many card as they wish in a column.
+- card name must be unique under a particular column.
+- card position also can be changed to same column or different column using drag and drop.
+- Various activity can be done on card.
+- User can add ,update and delete comment inside a card.
+- User can add as many checklist.
+- checklist item can be updated , deleted.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Screenshots
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![Products Table Rows Selected](public/images/products-table-rows-selected.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+![Products Table Rows Diff](public/images/products-table-rows-diff.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Building the project
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Once the repo is cloned, enter the folder and run the development server with:
+
+```bash
+npm install
+
+npm run dev
+
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the initial project.
+
+

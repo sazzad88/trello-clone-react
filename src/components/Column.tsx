@@ -201,8 +201,9 @@ const MainColumn: React.FC<Column> = (props) => {
               preventThisEvent={preventThisEvent}
             />
           ))}
-          <AddTask columnIndex={colIndex} />
         </div>
+
+        <AddTask columnIndex={colIndex} />
       </div>
     </>
   );

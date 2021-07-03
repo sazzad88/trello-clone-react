@@ -3,6 +3,7 @@ import "./App.css";
 import DefaultBoard from "./base-board";
 import Column from "./components/Column";
 import { uuid, slugify } from "./utils";
+
 import { useParams, useHistory } from "react-router-dom";
 import { ColumnContext } from "./context/ColumnContext";
 import TaskModal from "./components/TaskModal";
@@ -120,7 +121,8 @@ function App() {
     fromTaskIndex: number,
     toTaskIndex: number,
     fromColumnIndex: number,
-    toColumnIndex: number
+    toColumnIndex: number,
+    redirect?: boolean
   ) => {
     let columnList = [...columns];
 
@@ -151,6 +153,10 @@ function App() {
     columnList[toColumnIndex].tasks.splice(toTaskIndex, 0, taskToMove[0]);
 
     setColumns(columnList);
+
+    if (redirect) {
+      history.push(`/${columnList[toColumnIndex].id}/${new_slug}`);
+    }
   };
 
   const addTask = (ColumnIndex: number, title: string): Promise<boolean> => {

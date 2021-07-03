@@ -68,7 +68,8 @@ function AddToCard({ task }: { task: taskModel }) {
       ),
       Number(cardPosition),
       colIndex,
-      Number(colPosition)
+      Number(colPosition),
+      true
     );
     // setShow(false);
     // setTitle("");
